@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
+
 Route::get('/productos', function () {
     return view('productos/cajaAmiga');
 })->name('productos');
 
-Route::delete('producto/{id}', function ($id) {
+Route::get('/abonarCompra',[TicketController::class, 'create'])->name('abonarCompra');
 
-})->name('producto.delete');
+Route::post('/pagarTasa',[TicketController::class, 'store'])->name('pagarTasa');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -11,5 +11,6 @@ class Ticket extends Model
     public function productos(){
         return $this->belongsToMany(Producto::class);
     }
+    protected $fillable = ['targeta'];
     use HasFactory;
 }

@@ -11,7 +11,7 @@ class productos extends Component
     public $codigoBarras;
     public $textMessage;
     public $message;
-    public $total = 0;
+    public $total = 0.00;
 
 
     /**
@@ -22,6 +22,7 @@ class productos extends Component
     public function anyadirProducto()
     {
         $producto = Producto::all()->where('codigo', $this->codigoBarras)->first();
+        $this->codigoBarras = '';
         if (empty($producto)) {
             $this->textMessage = 'Código de barras incorrecto';
             $this->message = 'fault';
@@ -33,7 +34,7 @@ class productos extends Component
             $this->textMessage = 'Producto añadido correctamente';
             $this->message = 'success';
             /* Calculo el total */
-            $this->total += $producto->precio;
+            $this->total = number_format($this->total+ $producto->precio,2);
         }
     }
 
@@ -43,12 +44,13 @@ class productos extends Component
      * @param  mixed $producto
      * @return void
      */
-    public function borrarProducto($producto)
+    public function borrarProducto($productoA)
     {
         $primeraVez = false;
-        $productoId = $producto['id'];
+        $productoId = $productoA['id'];
         $productos = [];
         session_start();
+
         foreach ($_SESSION['productos'] as $producto) {
             if ($producto->id != $productoId) {
                 array_push($productos, $producto);
@@ -61,7 +63,8 @@ class productos extends Component
             }
         }
         /* Calculo el total */
-        $this->total -= $producto->precio;
+        $this->total = number_format($this->total - $productoA['precio'], 2);
+        /* $this->total -= $productoA['precio']; */
         $_SESSION['productos'] = $productos;
     }
 
@@ -80,7 +83,11 @@ class productos extends Component
         }
     }
 
-
+    public function anularCompra(){
+        $this->initSession();
+        session_destroy();
+        return redirect()->route('index');
+    }
 
     public function render()
     {

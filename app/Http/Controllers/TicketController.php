@@ -4,18 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -24,7 +17,13 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        if(request()->total > 0){
+            return view('pasarelaPago',
+            ['total' => request()->total]);
+        }else{
+            return back()->with('fault','Debes comprar algún producto');
+        }
+
     }
 
     /**
@@ -35,51 +34,29 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validados = $this->validados();
+        $ticket = new Ticket($validados);
+        $ticket->save();
+        $this->storeLineas($ticket->id);
+        return back()->with('success','Compra realizada con exito');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Ticket $ticket)
-    {
-        //
+    public function storeLineas($ticketId){
+        session_start();
+        $productos = $_SESSION['productos'];
+        foreach ($productos as $producto) {
+            DB::table('lineas')->insert([
+                'ticket_id' => $ticketId,
+                'producto_id' => $producto['id'],
+            ]);
+        };
+        session_destroy();
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Ticket $ticket)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
+   private function validados(){
+        $validados = request()->validate([
+            'targeta' => 'required',
+        ]);
+        return $validados;
     }
 }

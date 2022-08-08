@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->integer('targeta');
-            $table->timestamp('created_at');
+            $table->bigInteger('targeta');
+            $table->timestamps();
         });
     }
 

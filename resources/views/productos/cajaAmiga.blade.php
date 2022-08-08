@@ -9,7 +9,7 @@
     @livewireStyles
 </head>
 <body>
-    <div>
+    <div class="flex justify-center w-full">
         @livewire('productos')
     </div>
     @livewireScripts
