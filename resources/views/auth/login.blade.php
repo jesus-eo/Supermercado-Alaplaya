@@ -50,7 +50,11 @@
                 <x-button class="ml-3">
                     {{ __('Log in') }}
                 </x-button>
+
             </div>
         </form>
+        <x-button>
+                   <a href="{{route('index')}}">Volver</a>
+        </x-button>
     </x-auth-card>
 </x-guest-layout>

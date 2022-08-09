@@ -27,7 +27,13 @@ Route::get('/abonarCompra',[TicketController::class, 'create'])->name('abonarCom
 Route::post('/pagarTasa',[TicketController::class, 'store'])->name('pagarTasa');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('layouts/app');
 })->middleware(['auth'])->name('dashboard');
+
+/* Crud productos */
+
+/* Route::get('/productos',function (){
+    return view('livewire/crud-productos');
+})->middleware(['auth'])->name('crudProductos'); */
 
 require __DIR__.'/auth.php';
