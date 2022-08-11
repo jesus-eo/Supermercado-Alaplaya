@@ -23,7 +23,6 @@ class TicketController extends Controller
         }else{
             return back()->with('fault','Debes comprar algún producto');
         }
-
     }
 
     /**
@@ -41,6 +40,12 @@ class TicketController extends Controller
         return back()->with('success','Compra realizada con exito');
     }
 
+    /**
+     * storeLineas: Crea las lineas asociando el ticket(id) al producto(id)
+     *
+     * @param  mixed $ticketId
+     * @return void
+     */
     public function storeLineas($ticketId){
         session_start();
         $productos = $_SESSION['productos'];
@@ -52,6 +57,7 @@ class TicketController extends Controller
         };
         session_destroy();
     }
+
 
    private function validados(){
         $validados = request()->validate([

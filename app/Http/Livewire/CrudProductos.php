@@ -19,6 +19,12 @@ class CrudProductos extends Component
         'precio'=> 'required|numeric|min:1'
     ];
 
+    /**
+     * updated:verificación del formulario a medida que escribe.
+     *
+     * @param  mixed $propertyName
+     * @return void
+     */
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
@@ -35,6 +41,11 @@ class CrudProductos extends Component
        return Producto::get();
     }
 
+    /**
+     * storeProducto: Crea nuevo producto.
+     *
+     * @return void
+     */
     public function storeProducto(){
         $this->validate();
         $producto = Producto::where('codigo',$this->codigo)->where('denominacion',$this->denominacion)->first();
@@ -51,6 +62,11 @@ class CrudProductos extends Component
         $this->limpiarCampos();
     }
 
+    /**
+     * updateProducto:Actualiza producto.
+     *
+     * @return void
+     */
     public function updateProducto(){
         $this->validate();
         $producto = Producto::find($this->productoId);
@@ -66,10 +82,23 @@ class CrudProductos extends Component
         $this->limpiarCampos();
     }
 
+    /**
+     * borrarProducto:Borra producto
+     *
+     * @param  mixed $productoID
+     * @return void
+     */
     public function borrarProducto($productoID){
         Producto::find($productoID)->delete();
     }
-    /*Datos que veremos en el formulario de actualizar*/
+
+
+    /**
+     * createProducto:Inserta datos en los input el formulario de actualizar para visualizar los datos del producto seleccionado.
+     *
+     * @param  mixed $producto
+     * @return void
+     */
     public function createProducto($producto){
         $this->productoId = $producto['id'];
         $this->codigo = $producto['codigo'];
